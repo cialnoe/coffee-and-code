@@ -35,7 +35,15 @@
                 <td>{{ $member->tier_level }}</td>
                 <td>{{ $member->total_poin }}</td>
                 <td>
-                    [Edit] [Hapus]
+                    <a href="{{ route('members.edit', $member->id) }}">
+                        <button>Edit</button>
+                    </a>
+
+                    <form action="{{ route('members.destroy', $member->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus member ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" style="color: red;">Hapus</button>
+                    </form>
                 </td>
             </tr>
             @endforeach

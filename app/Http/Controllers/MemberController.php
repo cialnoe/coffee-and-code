@@ -75,7 +75,11 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        //
+        // Mencari data member berdasarkan ID
+        $member = Member::findOrFail($id);
+        
+        // Menampilkan halaman form edit beserta datanya
+        return view('members.edit', compact('member'));
     }
 
     /**
@@ -87,7 +91,25 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 1. Validasi input (Pengecualian nomor telepon untuk ID yang sedang diedit)
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'nomor_telepon' => 'required|string|unique:members,nomor_telepon,' . $id,
+            'tier_level' => 'required|in:Junior,Mid-Level,Senior Coder',
+            'total_poin' => 'required|integer|min:0'
+        ]);
+
+        // 2. Ambil data dan lakukan pembaruan
+        $member = Member::findOrFail($id);
+        $member->update([
+            'nama_lengkap' => $request->nama_lengkap,
+            'nomor_telepon' => $request->nomor_telepon,
+            'tier_level' => $request->tier_level,
+            'total_poin' => $request->total_poin
+        ]);
+
+        // 3. Kembalikan ke halaman index
+        return redirect()->route('members.index')->with('success', 'Data member berhasil diperbarui!');
     }
 
     /**
@@ -98,6 +120,10 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Cari data lalu hapus dari database
+        $member = Member::findOrFail($id);
+        $member->delete();
+
+        return redirect()->route('members.index')->with('success', 'Data member berhasil dihapus!');
     }
 }
