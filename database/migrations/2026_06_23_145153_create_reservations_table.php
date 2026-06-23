@@ -11,13 +11,17 @@ class CreateReservationsTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('reservations', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+    public function up(): void
+{
+    Schema::create('reservations', function (Blueprint $table) {
+        $table->id();
+        $table->string('nama_pengunjung');
+        $table->integer('nomor_meja');
+        $table->integer('durasi_jam');
+        $table->enum('status', ['pending', 'disetujui', 'selesai', 'dibatalkan'])->default('pending');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
