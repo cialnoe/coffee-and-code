@@ -74,8 +74,8 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'require'), // <- Ubah baris ini
         ],
 
         'sqlsrv' => [
