@@ -9,3 +9,13 @@ Route::get('/', function () {
 });
 
 Route::resource('members', MemberController::class);
+Route::get('/', function () {
+    return view('welcome');
+});
+
+use App\Http\Controllers\ReservationController;
+
+// Route untuk Modul Reservasi Coworking Space
+Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+Route::patch('/reservations/{id}/status/{status}', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
