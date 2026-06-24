@@ -21,9 +21,7 @@
                 <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-2">
                     Nama Lengkap <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $member->nama_lengkap) }}"
-                       class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-stone-800 focus:outline-none focus:border-amber-400 focus:bg-white transition text-sm"
-                       required>
+                <input type="text" name="nama_lengkap" id="nama_lengkap" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             </div>
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-2">
