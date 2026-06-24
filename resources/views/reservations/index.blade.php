@@ -1,116 +1,122 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservasi Coworking Space - Coffee & Code</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light py-5">
-    <div class="container bg-white p-4 rounded shadow-sm" style="max-width: 900px;">
-        
-        <!-- Notifikasi Sukses/Gagal -->
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+@extends('layouts.app')
 
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+@section('title', 'Kelola Reservasi')
+@section('page-title', 'Manajemen Reservasi')
+@section('page-subtitle', 'Pantau & ubah status pemesanan meja co-working')
 
-        <!-- SISI PENGUNJUNG: Form Booking Meja -->
-        <h3 class="mb-4 text-dark font-weight-bold">Form Booking Meja Koding</h3>
-        <form action="{{ route('reservations.store') }}" method="POST" class="mb-5">
-            @csrf
-            <div class="mb-3">
-                <label class="form-label font-weight-bold">Nama Pengunjung</label>
-                <input type="text" name="nama_pengunjung" class="form-control" required placeholder="Masukkan nama lengkap kamu">
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Nomor Meja</label>
-                    <input type="number" name="nomor_meja" class="form-control" min="1" required placeholder="Contoh: 5">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Durasi Kerja (Jam)</label>
-                    <input type="number" name="durasi_jam" class="form-control" min="1" required placeholder="Contoh: 3">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary px-4">Booking Sekarang</button>
-        </form>
+@section('content')
 
-        <hr class="my-4">
-
-        <!-- SISI ADMIN: Mengubah Status Reservasi -->
-        <h3 class="mb-3 text-dark font-weight-bold">Daftar Reservasi Meja (Panel Admin)</h3>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nama Pengunjung</th>
-                        <th>No Meja</th>
-                        <th>Durasi</th>
-                        <th>Status</th>
-                        <th style="min-width: 220px;">Aksi Ubah Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if($reservations->isEmpty())
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-3">Belum ada data reservasi saat ini.</td>
-                        </tr>
-                    @else
-                        @foreach($reservations as $res)
-                            <tr>
-                                <td>{{ $res->id }}</td>
-                                <td>{{ $res->nama_pengunjung }}</td>
-                                <td><span class="badge bg-secondary">Meja {{ $res->nomor_meja }}</span></td>
-                                <td>{{ $res->durasi_jam }} Jam</td>
-                                <td>
-                                    @if($res->status == 'pending')
-                                        <span class="badge bg-warning text-dark">PENDING</span>
-                                    @elseif($res->status == 'disetujui')
-                                        <span class="badge bg-info text-white">DISETUJUI</span>
-                                    @elseif($res->status == 'selesai')
-                                        <span class="badge bg-success">SELESAI</span>
-                                    @else
-                                        <span class="badge bg-danger">DIBATALKAN</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <!-- Aksi Setujui -->
-                                    <form action="{{ route('reservations.updateStatus', [$res->id, 'disetujui']) }}" method="POST" class="d-inline">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-info text-white py-1">Setuju</button>
-                                    </form>
-                                    
-                                    <!-- Aksi Selesai -->
-                                    <form action="{{ route('reservations.updateStatus', [$res->id, 'selesai']) }}" method="POST" class="d-inline">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-success py-1">Selesai</button>
-                                    </form>
-                                    
-                                    <!-- Aksi Batalkan -->
-                                    <form action="{{ route('reservations.updateStatus', [$res->id, 'dibatalkan']) }}" method="POST" class="d-inline">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-danger py-1">Batal</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </tbody>
-            </table>
+<div class="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-stone-200 flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <h2 class="font-bold text-stone-800">Semua Reservasi</h2>
+            <p class="text-xs text-stone-400 mt-0.5">Total {{ $reservations->count() }} reservasi tercatat</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+            <span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-semibold">
+                {{ $reservations->where('status', 'pending')->count() }} Pending
+            </span>
+            <span class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold">
+                {{ $reservations->where('status', 'disetujui')->count() }} Disetujui
+            </span>
+            <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full font-semibold">
+                {{ $reservations->where('status', 'selesai')->count() }} Selesai
+            </span>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+            <thead>
+                <tr class="bg-stone-50 border-b border-stone-200 text-stone-500 text-xs uppercase font-semibold">
+                    <th class="px-6 py-3 w-12">#</th>
+                    <th class="px-6 py-3">Nama Pengunjung</th>
+                    <th class="px-6 py-3">Nomor Meja</th>
+                    <th class="px-6 py-3">Durasi</th>
+                    <th class="px-6 py-3">Waktu Booking</th>
+                    <th class="px-6 py-3">Status</th>
+                    <th class="px-6 py-3 text-center min-w-[200px]">Ubah Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100 text-stone-700">
+                @forelse($reservations as $res)
+                <tr class="hover:bg-stone-50 transition">
+                    <td class="px-6 py-4 text-stone-400 text-xs font-mono">{{ $res->id }}</td>
+                    <td class="px-6 py-4 font-semibold text-stone-900">{{ $res->nama_pengunjung }}</td>
+                    <td class="px-6 py-4">
+                        <span class="bg-stone-100 text-stone-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                            <i class="fa-solid fa-table-cells-large mr-1"></i>Meja {{ $res->nomor_meja }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-stone-800 font-medium">{{ $res->durasi_jam }}</span>
+                        <span class="text-stone-400 text-xs ml-0.5">jam</span>
+                    </td>
+                    <td class="px-6 py-4 text-stone-500 text-xs">
+                        {{ $res->created_at->format('d M Y, H:i') }} WIB
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($res->status === 'pending')
+                            <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-circle-dot animate-pulse"></i> Pending
+                            </span>
+                        @elseif($res->status === 'disetujui')
+                            <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-check-circle"></i> Disetujui
+                            </span>
+                        @elseif($res->status === 'selesai')
+                            <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-circle-check"></i> Selesai
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 bg-red-100 text-red-600 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-circle-xmark"></i> Dibatalkan
+                            </span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center justify-center gap-2 flex-wrap">
+                            <form action="{{ route('reservations.updateStatus', [$res->id, 'disetujui']) }}" method="POST" class="inline">
+                                @csrf @method('PATCH')
+                                <button type="submit"
+                                    {{ $res->status !== 'pending' ? 'disabled' : '' }}
+                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold transition
+                                    {{ $res->status !== 'pending' ? 'bg-stone-100 text-stone-300 cursor-not-allowed' : 'bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white' }}">
+                                    <i class="fa-solid fa-check mr-1"></i>Setuju
+                                </button>
+                            </form>
+                            <form action="{{ route('reservations.updateStatus', [$res->id, 'selesai']) }}" method="POST" class="inline">
+                                @csrf @method('PATCH')
+                                <button type="submit"
+                                    {{ in_array($res->status, ['selesai', 'dibatalkan']) ? 'disabled' : '' }}
+                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold transition
+                                    {{ in_array($res->status, ['selesai', 'dibatalkan']) ? 'bg-stone-100 text-stone-300 cursor-not-allowed' : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white' }}">
+                                    <i class="fa-solid fa-flag-checkered mr-1"></i>Selesai
+                                </button>
+                            </form>
+                            <form action="{{ route('reservations.updateStatus', [$res->id, 'dibatalkan']) }}" method="POST" class="inline">
+                                @csrf @method('PATCH')
+                                <button type="submit"
+                                    {{ in_array($res->status, ['selesai', 'dibatalkan']) ? 'disabled' : '' }}
+                                    class="px-3 py-1.5 rounded-lg text-xs font-semibold transition
+                                    {{ in_array($res->status, ['selesai', 'dibatalkan']) ? 'bg-stone-100 text-stone-300 cursor-not-allowed' : 'bg-red-50 text-red-600 hover:bg-red-500 hover:text-white' }}">
+                                    <i class="fa-solid fa-ban mr-1"></i>Batal
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="px-6 py-16 text-center text-stone-400">
+                        <i class="fa-solid fa-calendar-xmark text-4xl block mb-3 text-stone-300"></i>
+                        <p class="font-medium">Belum ada data reservasi.</p>
+                        <p class="text-xs mt-1">Reservasi akan muncul setelah pengunjung melakukan booking di landing page.</p>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
