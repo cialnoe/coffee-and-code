@@ -5,9 +5,9 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ReservationController;
 
-// Halaman utama otomatis diarahkan ke daftar members
+// Halaman utama langsung menampilkan welcome.blade.php
 Route::get('/', function () {
-    return redirect()->route('members.index');
+    return view('welcome');
 });
 
 
@@ -19,3 +19,12 @@ Route::resource('menus', MenuController::class);
 Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
 Route::patch('/reservations/{id}/status/{status}', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
+
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+});
+
+// Route khusus untuk melihat landing page
+Route::get('/home', function () {
+    return view('welcome');
+});
