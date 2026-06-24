@@ -9,7 +9,6 @@
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans scroll-smooth">
 
-    <!-- TOAST NOTIFICATION (flash) -->
     @if(session('success'))
     <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm font-semibold transition-all">
         <i class="fa-solid fa-circle-check text-lg"></i>
@@ -24,7 +23,6 @@
     </div>
     @endif
 
-    <!-- NAVBAR -->
     <nav class="bg-stone-900/95 backdrop-blur-md text-white sticky top-0 z-50 shadow-lg">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="#" class="text-xl font-bold tracking-wider text-amber-400 flex items-center gap-2">
@@ -40,12 +38,10 @@
                     <i class="fa-solid fa-gauge-high mr-1"></i>Dashboard
                 </a>
             </div>
-            <!-- Mobile menu button -->
             <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-stone-800 px-4 pb-4 space-y-2">
             <a href="#home" class="block py-2 text-stone-300 hover:text-amber-400 text-sm">Home</a>
             <a href="#features" class="block py-2 text-stone-300 hover:text-amber-400 text-sm">Fasilitas</a>
@@ -55,7 +51,6 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <header id="home" class="bg-cover bg-center h-[90vh] flex items-center justify-center relative"
         style="background-image: linear-gradient(rgba(28,25,23,0.75), rgba(28,25,23,0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1470&auto=format&fit=crop');">
         <div class="text-center text-white px-4 max-w-3xl">
@@ -79,7 +74,6 @@
         </div>
     </header>
 
-    <!-- STATS COUNTER SECTION -->
     <section class="bg-stone-900 text-white py-10 border-t border-stone-800">
         <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
@@ -101,7 +95,6 @@
         </div>
     </section>
 
-    <!-- FEATURES -->
     <section id="features" class="py-20 max-w-6xl mx-auto px-4">
         <div class="text-center mb-16">
             <span class="text-amber-600 text-xs font-bold uppercase tracking-wider">Kenapa Kami?</span>
@@ -133,7 +126,6 @@
         </div>
     </section>
 
-    <!-- MENU SECTION -->
     <section id="menu" class="py-20 bg-stone-100">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-16">
@@ -161,10 +153,11 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-stone-200/60 group">
                     <div class="overflow-hidden h-52">
                         <img class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                             src="https://images.unsplash.com/photo-1570968915860-54d5c301fc9f?q=80&w=500" alt="Latte">
+                             src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=500&auto=format&fit=crop" alt="Vanilla Latte Art">
                     </div>
                     <div class="p-6">
                         <h3 class="font-bold text-xl mb-1">Vanilla Latte Art</h3>
@@ -179,6 +172,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-stone-200/60 group">
                     <div class="overflow-hidden h-52">
                         <img class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
@@ -206,7 +200,6 @@
         </div>
     </section>
 
-    <!-- TESTIMONIALS -->
     <section id="testimonials" class="py-20 max-w-6xl mx-auto px-4">
         <div class="text-center mb-16">
             <span class="text-amber-600 text-sm font-bold uppercase tracking-wider">Kata Mereka</span>
@@ -261,7 +254,6 @@
         </div>
     </section>
 
-    <!-- RESERVATION SECTION — FORM FIELD NAMES FIXED -->
     <section id="reservation" class="py-20 bg-stone-900 text-white relative overflow-hidden">
         <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
@@ -328,7 +320,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-stone-950 text-stone-600 py-8 text-center text-xs border-t border-stone-900">
         <p class="mb-2">&copy; 2026 Coffee Code. Dibuat dengan penuh kafein dan baris kode.</p>
         <p class="text-stone-700">Informatics Project Framework Collaboration</p>
